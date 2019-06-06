@@ -188,17 +188,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
             //获取播放状态更改UI（暂停，播放）,state:10为播放第一首歌曲 11为暂停 12为继续播放
             state = intent.getIntExtra("state", -1);
             if (state != -1) {
-                switch (state) {
-                    case 10:
-                        iv_playOrPause.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.playbar_btn_play));
-                        break;
-                    case 11:
-                        iv_playOrPause.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.playbar_btn_pause));
-                        break;
-                    case 12:
-                        iv_playOrPause.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.playbar_btn_play));
-                        break;
-                }
+                updatePlayOrPauseUI(state);
             }
 
             int currPosition = intent.getIntExtra("currPosition", -1);
@@ -279,10 +269,30 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
     }
 
     //将当前播放歌曲显示
-    public void showPlayInfo() {
+    private void showPlayInfo() {
         if (musicList != null && musicList.size() > index) {
             tv_musicName.setText(musicList.get(index).getName());
             tv_musicAuthor.setText(musicList.get(index).getAuthor());
+        }
+    }
+
+    /**
+     * 根据状态更改播放暂停按钮UI界面
+     * @param state
+     */
+    private void updatePlayOrPauseUI(int state){
+        switch (state) {
+            case 10:
+                iv_playOrPause.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.playbar_btn_play));
+                break;
+            case 11:
+                iv_playOrPause.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.playbar_btn_pause));
+                break;
+            case 12:
+                iv_playOrPause.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.playbar_btn_play));
+                break;
+            default:
+                break;
         }
     }
 

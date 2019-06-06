@@ -57,7 +57,9 @@ public class MusicService extends Service {
             //当歌曲播放完成后调用该方法
             public void onCompletion(MediaPlayer mp) {
                 //发送广播给Activity播放下一曲
-                Intent intent = new Intent("com.xch.musicListActivity");
+                Intent intent = new Intent();
+                intent.setAction("com.xch.musicListActivity");//列表
+                intent.setAction("com.xch.musicPlayActivity");//播放页
                 intent.putExtra("playFinish", 1);
                 sendBroadcast(intent);
                 currPosition = 0;
@@ -103,7 +105,9 @@ public class MusicService extends Service {
                 }
             }
             //将当前状态发送给Activity更新按钮
-            Intent intent2 = new Intent("com.xch.musicListActivity");
+            Intent intent2 = new Intent();
+            intent2.setAction("com.xch.musicListActivity");//列表
+            intent2.setAction("com.xch.musicPlayActivity");//播放页
             intent2.putExtra("state", mstate);
             sendBroadcast(intent2);
         }
@@ -164,7 +168,9 @@ public class MusicService extends Service {
             switch (msg.what) {
                 case 1:
                     currPosition = player.getCurrentPosition();//获取播放歌曲的当前时间
-                    Intent intent = new Intent("com.xch.musicListActivity");
+                    Intent intent = new Intent();
+                    intent.setAction("com.xch.musicListActivity");//列表
+                    intent.setAction("com.xch.musicPlayActivity");//播放页
                     intent.putExtra("currPosition", currPosition);
                     intent.putExtra("duration", duration);
                     intent.putExtra("state", mstate);

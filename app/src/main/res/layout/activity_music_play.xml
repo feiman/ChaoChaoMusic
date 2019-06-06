@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_lyric"
+    android:id="@+id/activity_play"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/playing_bg2"
@@ -160,14 +160,14 @@
 
 
         <ImageView
-            android:id="@+id/iv_top"
+            android:id="@+id/iv_prev"
             android:layout_width="30dp"
             android:layout_height="55dp"
             android:layout_weight="1"
             android:src="@mipmap/play_btn_prev" />
 
         <ImageView
-            android:id="@+id/iv_play"
+            android:id="@+id/iv_playOrPause"
             android:layout_width="35dp"
             android:layout_height="85dp"
             android:layout_weight="1"
