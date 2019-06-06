@@ -1,0 +1,271 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/headerview"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:background="#799D96"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:background="?android:attr/selectableItemBackground">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/actionbar_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_toLeftOf="@+id/viewpager_list_button"
+            android:layout_toRightOf="@+id/iv_back"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/viewpager_list_toptext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="如果我变成回忆"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/viewpager_list_bottom_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="我在你眼里，看到了一个世界"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/viewpager_list_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="false"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/actionbar_more" />
+
+    </RelativeLayout>
+
+
+    <!--<View-->
+        <!--android:id="@+id/overlay"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="270dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="#60919191" />-->
+
+    <RelativeLayout
+        android:id="@+id/headerdetail"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="70dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/fra"
+                android:layout_width="112dp"
+                android:layout_height="110dp"
+                android:layout_marginLeft="5dp">
+
+                <ImageView
+                    android:id="@+id/playlist_art"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/list_third" />
+
+                <FrameLayout
+                    android:id="@+id/playlist_fav"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#aa000000" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/play_icn_love" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#1e000000"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/playlist_listen_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:gravity="right"
+                        android:text="35896"
+                        android:textColor="@color/white_text"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/album_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="这是本地歌单列表，这是本地歌单列表"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/playlist_collect"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/playlist_collect_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/list_detail_icn_fav" />
+
+                <TextView
+                    android:id="@+id/playlist_collect_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="收藏"
+                    android:textColor="@color/white_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/playlist_cmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/list_detail_icn_cmt" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="评论"
+                    android:textColor="@color/white_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/playlist_share"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/playlist_share_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/list_detail_icn_share" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="分享"
+                    android:textColor="@color/white_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/playlist_down"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/list_detail_icn_dld" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="下载"
+                    android:textColor="@color/white_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
