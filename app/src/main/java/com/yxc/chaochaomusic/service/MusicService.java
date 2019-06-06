@@ -57,11 +57,13 @@ public class MusicService extends Service {
             //当歌曲播放完成后调用该方法
             public void onCompletion(MediaPlayer mp) {
                 //发送广播给Activity播放下一曲
-                Intent intent = new Intent();
-                intent.setAction("com.xch.musicListActivity");//列表
-                intent.setAction("com.xch.musicPlayActivity");//播放页
+                Intent intent = new Intent("com.xch.musicListActivity");
                 intent.putExtra("playFinish", 1);
                 sendBroadcast(intent);
+
+                Intent intent2 = new Intent("com.xch.musicPlayActivity");
+                intent2.putExtra("playFinish", 1);
+                sendBroadcast(intent2);
                 currPosition = 0;
                 duration = 0;
             }
@@ -107,9 +109,13 @@ public class MusicService extends Service {
             //将当前状态发送给Activity更新按钮
             Intent intent2 = new Intent();
             intent2.setAction("com.xch.musicListActivity");//列表
-            intent2.setAction("com.xch.musicPlayActivity");//播放页
             intent2.putExtra("state", mstate);
             sendBroadcast(intent2);
+
+            Intent intent3 = new Intent();
+            intent3.setAction("com.xch.musicPlayActivity");//播放页
+            intent3.putExtra("state", mstate);
+            sendBroadcast(intent3);
         }
     }
 
@@ -168,13 +174,17 @@ public class MusicService extends Service {
             switch (msg.what) {
                 case 1:
                     currPosition = player.getCurrentPosition();//获取播放歌曲的当前时间
-                    Intent intent = new Intent();
-                    intent.setAction("com.xch.musicListActivity");//列表
-                    intent.setAction("com.xch.musicPlayActivity");//播放页
+                    Intent intent = new Intent("com.xch.musicListActivity");//列表页
                     intent.putExtra("currPosition", currPosition);
                     intent.putExtra("duration", duration);
                     intent.putExtra("state", mstate);
                     sendBroadcast(intent);
+
+                    Intent intent2 = new Intent("com.xch.musicPlayActivity");//播放页
+                    intent2.putExtra("currPosition", currPosition);
+                    intent2.putExtra("duration", duration);
+                    intent2.putExtra("state", mstate);
+                    sendBroadcast(intent2);
                     break;
                 default:
                     break;
