@@ -3,8 +3,9 @@ package com.yxc.chaochaomusic.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Media;
+
+import com.yxc.chaochaomusic.bean.LocalMusic;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,12 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.yxc.chaochaomusic.R;
-import com.yxc.chaochaomusic.util.LocalMusic;
+import com.yxc.chaochaomusic.bean.LocalMusic;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

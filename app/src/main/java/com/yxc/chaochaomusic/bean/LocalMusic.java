@@ -1,4 +1,4 @@
-package com.yxc.chaochaomusic.util;
+package com.yxc.chaochaomusic.bean;
 
 
 import java.io.Serializable;

@@ -1,15 +1,17 @@
 package com.yxc.chaochaomusic.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
+import android.os.Message;
 
-import com.yxc.chaochaomusic.util.LocalMusic;
+import com.yxc.chaochaomusic.bean.LocalMusic;
 
 public class MusicService extends Service {
     private int newmusic;
@@ -45,6 +47,7 @@ public class MusicService extends Service {
         intentFilter.addAction("com.xch.musicService");
         registerReceiver(musicServiceBroadcastReceiver, intentFilter);
     }
+
     /**
      * 监听歌曲播放是否完成
      */
@@ -79,7 +82,7 @@ public class MusicService extends Service {
 
             //如果是暂停播放按钮，根据mstate控制播放状态
             int isPlayOrPause = intent.getIntExtra("isPlayOrPause", -1);
-            if (isPlayOrPause != -1&&isPlayOrPause==1) {
+            if (isPlayOrPause != -1 && isPlayOrPause == 1) {
                 switch (mstate) {
                     //第一次播放歌曲
                     case 10:
@@ -99,6 +102,10 @@ public class MusicService extends Service {
                         break;
                 }
             }
+            //将当前状态发送给Activity更新按钮
+            Intent intent2 = new Intent("com.xch.musicListActivity");
+            intent2.putExtra("state", mstate);
+            sendBroadcast(intent2);
         }
     }
 
@@ -124,11 +131,49 @@ public class MusicService extends Service {
 
                 duration = player.getDuration();//获取当前播放歌曲总时长
 
-//                new playMusicThread().start();
+                new updateProgressThread().start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
     }
+
+    class updateProgressThread extends Thread {
+        @Override
+        public void run() {
+            do {
+                try {
+                    Thread.sleep(1000);
+                    Message msg = new Message();
+                    msg.what = 1;
+                    mHandler.sendMessage(msg);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (currPosition < duration);
+        }
+    }
+
+    //在主线程里面处理消息并更新UI界面
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    currPosition = player.getCurrentPosition();//获取播放歌曲的当前时间
+                    Intent intent = new Intent("com.xch.musicListActivity");
+                    intent.putExtra("currPosition", currPosition);
+                    intent.putExtra("duration", duration);
+                    intent.putExtra("state", mstate);
+                    sendBroadcast(intent);
+                    break;
+                default:
+                    break;
+
+            }
+        }
+    };
 }
