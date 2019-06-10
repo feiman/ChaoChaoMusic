@@ -32,7 +32,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/fragment_main_item_count"
+            android:id="@+id/tv_localeMusicCount"
             android:layout_width="match_parent"
             android:layout_height="39dp"
             android:layout_marginLeft="-5dp"
@@ -40,7 +40,7 @@
             android:layout_marginBottom="6dp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="(168)"
+            android:text="(0)"
             android:textColor="@color/test_color"
             android:textSize="12sp" />
 
@@ -83,7 +83,7 @@
             android:layout_marginBottom="6dp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="(8)"
+            android:text="(0)"
             android:textColor="@color/test_color"
             android:textSize="12sp" />
 
@@ -169,7 +169,7 @@
             android:layout_marginBottom="6dp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="(16)"
+            android:text="(0)"
             android:textColor="@color/test_color"
             android:textSize="12sp" />
 

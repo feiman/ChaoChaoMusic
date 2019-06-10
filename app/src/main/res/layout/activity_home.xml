@@ -21,16 +21,16 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:clickable="true"
-            android:background="@drawable/actionbar_menu"/>
+            android:background="@drawable/actionbar_menu"
+            android:clickable="true" />
 
         <ImageView
             android:id="@+id/iv_more"
             android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/iv_music"
-            android:clickable="true"
-            android:background="@drawable/actionbar_disco"/>
+            android:background="@drawable/actionbar_disco"
+            android:clickable="true" />
 
         <ImageView
             android:id="@+id/iv_music"
@@ -65,57 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/placeholder_disk_210" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="41dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="6dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="这里是歌曲名称"
-                android:textSize="17dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="歌手"
-                android:textSize="10dp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/playbar_btn_playlist" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/playbar_btn_play" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/playbar_btn_next" />
-    </LinearLayout>
+    <!--底部-->
+    <include layout="@layout/common_playing_bottom" />
 
 </LinearLayout>

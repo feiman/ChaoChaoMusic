@@ -1,18 +1,11 @@
 package com.yxc.chaochaomusic;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +20,6 @@ import android.widget.Toast;
 
 import com.yxc.chaochaomusic.adapter.Adapter_LocalMusic;
 import com.yxc.chaochaomusic.bean.LocalMusic;
-import com.yxc.chaochaomusic.util.MusicUtil;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,44 +36,13 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
     private Adapter_LocalMusic adapter;
     private ListView listView;
     private List<LocalMusic> musicList;
-    private MusicUtil musicUtil;
     private LocalMusic music;
 
     private int index = 0;
     private int state = 10;//10为播放第一首歌曲 11为暂停 12为继续播放
     private int playPattern = 0;//0：列表循环 1：随机播放 2：单曲循环
 
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    adapter = new Adapter_LocalMusic(musicList, mContext);
-                    listView.setAdapter(adapter);
-                    //先默认展示第一首歌曲信息
-                    showPlayInfo();
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            index = i;
-                            music = musicList.get(i);
-                            showPlayInfo();
 
-                            //发送广播通知服务播放新歌曲
-                            Intent intent = new Intent();
-                            intent.setAction("com.xch.musicService");
-                            intent.putExtra("music", music);
-                            intent.putExtra("newmusic", 1);
-                            sendBroadcast(intent);
-                        }
-                    });
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,14 +70,35 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
         //注册广播
         registerActivityBroadcastReceiver();
 
-        //动态权限申请
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MusicListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        } else {
-            getLocalMusicData();
-        }
+        getLocalMusicListByIntent();
+    }
 
+    private void getLocalMusicListByIntent() {
+        Intent intent = getIntent();
+        musicList = (List<LocalMusic>) intent.getSerializableExtra("musicList");
+        initListView();
+    }
 
+    private void initListView() {
+        adapter = new Adapter_LocalMusic(musicList, mContext);
+        listView.setAdapter(adapter);
+        //先默认展示第一首歌曲信息
+        showPlayInfo();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                index = i;
+                music = musicList.get(i);
+                showPlayInfo();
+
+                //发送广播通知服务播放新歌曲
+                Intent intent = new Intent();
+                intent.setAction("com.xch.musicService");
+                intent.putExtra("music", music);
+                intent.putExtra("newmusic", 1);
+                sendBroadcast(intent);
+            }
+        });
     }
 
     /**
@@ -135,6 +117,10 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
         intent.setAction("com.xch.musicService");
         switch (view.getId()) {
             case R.id.ly_paly_bottom://跳转至播放页面
+                if(musicList==null||musicList.size()<1){
+                    Toast.makeText(mContext, "你没得歌曲，去下载两首嘛！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intentActivity = new Intent(mContext, MusicPlayActivity.class);
                 intentActivity.putExtra("musicList", (Serializable) musicList);
                 intentActivity.putExtra("index", index);
@@ -145,6 +131,10 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case R.id.iv_playOrPause://播放或暂停
+                if(musicList==null||musicList.size()<1){
+                    Toast.makeText(mContext, "你没得歌曲，去下载两首嘛！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //第一次进入，则播放第一首歌曲
                 if (music == null) {
                     music = musicList.get(index);
@@ -154,6 +144,10 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
                 intent.putExtra("isPlayOrPause", 1);//判断是否是点击了播放/暂停（这个按钮才需判断播放状态）
                 break;
             case R.id.iv_playNext://下一首
+                if(musicList==null||musicList.size()<1){
+                    Toast.makeText(mContext, "你没得歌曲，去下载两首嘛！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 index = getBottomIndex();
                 music = musicList.get(index);
                 showPlayInfo();
@@ -223,35 +217,6 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    private void getLocalMusicData() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                musicUtil = new MusicUtil();
-                musicList = musicUtil.getMusicData(mContext);
-
-                //异步消息处理机制
-                Message message = new Message();
-                message.what = 1;
-                handler.sendMessage(message);
-            }
-        }).start();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocalMusicData();
-                } else {
-                    Toast.makeText(this, "你拒绝了权限申请，可能无法扫描到本地音乐哟！", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-        }
-    }
-
     //将当前播放歌曲显示
     private void showPlayInfo() {
         if (musicList != null && musicList.size() > index) {
@@ -262,9 +227,10 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
 
     /**
      * 根据状态更改播放暂停按钮UI界面
+     *
      * @param state
      */
-    private void updatePlayOrPauseUI(int state){
+    private void updatePlayOrPauseUI(int state) {
         switch (state) {
             case 10:
                 iv_playOrPause.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.playbar_btn_play));
@@ -304,7 +270,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
                     state = data.getIntExtra("state", -1);
                     if (index != -1) {
                         //刷新播放信息ui
-//                        showPlayInfo();
+                        showPlayInfo();
                         listView.setSelection(index);
                     }
                 }
