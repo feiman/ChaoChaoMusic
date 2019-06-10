@@ -88,6 +88,7 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
         updatePlayOrPauseUI(state);
         musicPlayBg(state);
 
+        seekBarChangeListener();
     }
 
     class MusicPlayActivityBroadcastReceiver extends BroadcastReceiver {
@@ -170,6 +171,30 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
             mindex = index;
         }
         return mindex;
+    }
+
+    /**
+     * 监听进度条事件
+     */
+    public void seekBarChangeListener() {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //拖动停止,发送广播更新播放位置
+                int progress = seekBar.getProgress();
+                Intent intent = new Intent("com.xch.musicService");
+                intent.putExtra("progress", progress);
+                sendBroadcast(intent);
+            }
+        });
     }
 
     @Override

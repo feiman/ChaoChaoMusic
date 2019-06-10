@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 
 import com.yxc.chaochaomusic.bean.LocalMusic;
 
@@ -106,6 +107,15 @@ public class MusicService extends Service {
                         break;
                 }
             }
+
+            //拖动进度条发送的广播，先获取歌曲进度位置
+            int progress=intent.getIntExtra("progress",-1);
+            if(progress!=-1){
+                //转换为播放歌曲的时间(毫秒)
+                currPosition= (int) (((progress*1.0)/100)*duration);
+                player.seekTo(currPosition);
+            }
+
             //将当前状态发送给Activity更新按钮
             Intent intent2 = new Intent();
             intent2.setAction("com.xch.musicListActivity");//列表

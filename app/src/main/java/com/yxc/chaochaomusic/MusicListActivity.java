@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yxc.chaochaomusic.adapter.Adapter_LocalMusic;
-import com.yxc.chaochaomusic.service.MusicService;
 import com.yxc.chaochaomusic.bean.LocalMusic;
 import com.yxc.chaochaomusic.util.MusicUtil;
 
@@ -106,8 +105,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
         iv_playOrPause.setOnClickListener(this);
 
         playPattern = getPlayPattern();
-        //启动服务
-        startMusicService();
+
         //注册广播
         registerActivityBroadcastReceiver();
 
@@ -238,20 +236,6 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
                 handler.sendMessage(message);
             }
         }).start();
-    }
-
-
-    /**
-     * 启动播放音乐的服务
-     */
-    private void startMusicService() {
-        Intent startIntent = new Intent(mContext, MusicService.class);
-        startService(startIntent);
-    }
-
-    private void stopMusicService() {
-        Intent stopIntent = new Intent(mContext, MusicService.class);
-        stopService(stopIntent);
     }
 
     @Override

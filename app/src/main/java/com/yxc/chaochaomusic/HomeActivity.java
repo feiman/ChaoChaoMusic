@@ -1,5 +1,7 @@
 package com.yxc.chaochaomusic;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,8 +14,10 @@ import android.widget.Toast;
 import com.yxc.chaochaomusic.fragment.Fragment_Friends;
 import com.yxc.chaochaomusic.fragment.Fragment_More;
 import com.yxc.chaochaomusic.fragment.Fragment_Music;
+import com.yxc.chaochaomusic.service.MusicService;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
+    private Context mContext;
     private ImageView iv_menu, iv_more, iv_music, iv_friends;
 
     @Override
@@ -21,6 +25,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_home);
+        mContext=HomeActivity.this;
         iv_menu = findViewById(R.id.iv_menu);
         iv_more = findViewById(R.id.iv_more);
         iv_music = findViewById(R.id.iv_music);
@@ -33,6 +38,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         iv_more.setOnClickListener(this);
         iv_music.setOnClickListener(this);
         iv_friends.setOnClickListener(this);
+
+        //启动服务
+        startMusicService();
     }
 
     @Override
@@ -75,5 +83,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_layout, fragment);
         transaction.commit();
+    }
+
+    /**
+     * 启动播放音乐的服务
+     */
+    private void startMusicService() {
+        Intent startIntent = new Intent(mContext, MusicService.class);
+        startService(startIntent);
+    }
+
+    private void stopMusicService() {
+        Intent stopIntent = new Intent(mContext, MusicService.class);
+        stopService(stopIntent);
     }
 }
