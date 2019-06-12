@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,9 +21,7 @@ public class MusicService extends Service {
     private int mstate = 10;//10为播放第一首歌曲 11为暂停 12为继续播放
     private int currPosition, duration;//当前播放时间 总时长
     private MediaPlayer player = new MediaPlayer();//播放歌曲类
-
-    public MusicService() {
-    }
+    private MusicServiceBroadcastReceiver musicServiceBroadcastReceiver;
 
     @Override
     public void onCreate() {
@@ -43,9 +42,10 @@ public class MusicService extends Service {
      * 注册广播接收器，用于接收activity发的广播
      */
     private void registerServiceBroadcastReceiver() {
-        MusicServiceBroadcastReceiver musicServiceBroadcastReceiver = new MusicServiceBroadcastReceiver();
+        musicServiceBroadcastReceiver = new MusicServiceBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.xch.musicService");
+        intentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);//耳机拔出的广播
         registerReceiver(musicServiceBroadcastReceiver, intentFilter);
     }
 
@@ -114,11 +114,17 @@ public class MusicService extends Service {
             }
 
             //拖动进度条发送的广播，先获取歌曲进度位置
-            int progress=intent.getIntExtra("progress",-1);
-            if(progress!=-1){
+            int progress = intent.getIntExtra("progress", -1);
+            if (progress != -1) {
                 //转换为播放歌曲的时间(毫秒)
-                currPosition= (int) (((progress*1.0)/100)*duration);
+                currPosition = (int) (((progress * 1.0) / 100) * duration);
                 player.seekTo(currPosition);
+            }
+
+            //拔出耳机，暂停
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                player.pause();
+                mstate = 12;
             }
 
             //将当前状态发送给Activity更新按钮
