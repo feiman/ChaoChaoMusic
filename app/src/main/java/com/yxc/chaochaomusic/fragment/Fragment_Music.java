@@ -19,6 +19,7 @@ import com.yxc.chaochaomusic.bean.LocalMusic;
 import java.io.Serializable;
 import java.util.List;
 
+
 public class Fragment_Music extends Fragment implements View.OnClickListener {
     private LinearLayout ly_localMusic;
     private TextView tv_localeMusicCount;
@@ -41,10 +42,7 @@ public class Fragment_Music extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ly_localMusic:
-                Intent intent=new Intent(getActivity(), MusicListActivity.class);
-                List<LocalMusic> musicList=homeActivity.getLocaleMusicList();
-                intent.putExtra("musicList", (Serializable) musicList);
-                startActivity(intent);
+                homeActivity.jumpMusicListActivity();
                 break;
             default:
                 break;

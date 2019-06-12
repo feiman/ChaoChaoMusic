@@ -58,13 +58,18 @@ public class MusicService extends Service {
             //当歌曲播放完成后调用该方法
             public void onCompletion(MediaPlayer mp) {
                 //发送广播给Activity播放下一曲
-                Intent intent = new Intent("com.xch.musicListActivity");
+                Intent intent = new Intent("com.xch.musicListActivity");//列表页
                 intent.putExtra("playFinish", 1);
                 sendBroadcast(intent);
 
-                Intent intent2 = new Intent("com.xch.musicPlayActivity");
+                Intent intent2 = new Intent("com.xch.musicPlayActivity");//播放页
                 intent2.putExtra("playFinish", 1);
                 sendBroadcast(intent2);
+
+                Intent intent3 = new Intent("com.xch.homeActivity");//首页
+                intent3.putExtra("playFinish", 1);
+                sendBroadcast(intent3);
+
                 currPosition = 0;
                 duration = 0;
             }
@@ -122,10 +127,15 @@ public class MusicService extends Service {
             intent2.putExtra("state", mstate);
             sendBroadcast(intent2);
 
-            Intent intent3 = new Intent();
-            intent3.setAction("com.xch.musicPlayActivity");//播放页
-            intent3.putExtra("state", mstate);
-            sendBroadcast(intent3);
+            Intent intentMusicPlay = new Intent();
+            intentMusicPlay.setAction("com.xch.musicPlayActivity");//播放页
+            intentMusicPlay.putExtra("state", mstate);
+            sendBroadcast(intentMusicPlay);
+
+            Intent intentHome = new Intent();
+            intentHome.setAction("com.xch.homeActivity");//首页
+            intentHome.putExtra("state", mstate);
+            sendBroadcast(intentHome);
         }
     }
 
@@ -195,6 +205,12 @@ public class MusicService extends Service {
                     intent2.putExtra("duration", duration);
                     intent2.putExtra("state", mstate);
                     sendBroadcast(intent2);
+
+                    Intent intent3 = new Intent("com.xch.homeActivity");//首页
+                    intent3.putExtra("currPosition", currPosition);
+                    intent3.putExtra("duration", duration);
+                    intent3.putExtra("state", mstate);
+                    sendBroadcast(intent3);
                     break;
                 default:
                     break;

@@ -37,6 +37,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
     private ListView listView;
     private List<LocalMusic> musicList;
     private LocalMusic music;
+    private MusicListActivityBroadcastReceiver musicListActivityBroadcastReceiver;
 
     private int index = 0;
     private int state = 10;//10为播放第一首歌曲 11为暂停 12为继续播放
@@ -75,6 +76,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
 
     private void getLocalMusicListByIntent() {
         Intent intent = getIntent();
+        index=intent.getIntExtra("index",0);
         musicList = (List<LocalMusic>) intent.getSerializableExtra("musicList");
         initListView();
     }
@@ -105,10 +107,16 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
      * 注册广播接收器，用于接收serivce发的广播
      */
     private void registerActivityBroadcastReceiver() {
-        MusicListActivityBroadcastReceiver musicListActivityBroadcastReceiver = new MusicListActivityBroadcastReceiver();
+        musicListActivityBroadcastReceiver = new MusicListActivityBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.xch.musicListActivity");
         registerReceiver(musicListActivityBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(musicListActivityBroadcastReceiver);
     }
 
     @Override
@@ -128,6 +136,10 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
                 startActivityForResult(intentActivity, REQUESTCODE_MUSICPLAY);
                 break;
             case R.id.iv_back://返回
+                Intent intent2 = new Intent();
+                intent2.putExtra("index", index);
+                intent2.putExtra("state", state);
+                setResult(RESULT_OK, intent2);
                 finish();
                 break;
             case R.id.iv_playOrPause://播放或暂停
@@ -278,5 +290,15 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
             default:
                 break;
         }
+    }
+
+    //按下返回键
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("index", index);
+        intent.putExtra("state", state);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
