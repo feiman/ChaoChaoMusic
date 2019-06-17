@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
     private ImageView iv_back, iv_playOrPause, iv_playNext;
     private TextView tv_musicName, tv_musicAuthor;
     private LinearLayout ly_paly_bottom;
+    private RelativeLayout ly_playAll;
     private SharedPreferences spf;
     private SharedPreferences.Editor editor;
     private static final int REQUESTCODE_MUSICPLAY = 1;
@@ -58,6 +60,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
         tv_musicName = findViewById(R.id.tv_musicName);
         tv_musicAuthor = findViewById(R.id.tv_musicAuthor);
         ly_paly_bottom = findViewById(R.id.ly_paly_bottom);
+        ly_playAll = findViewById(R.id.ly_playAll);
         iv_back = findViewById(R.id.iv_back);
         iv_playOrPause = findViewById(R.id.iv_playOrPause);
         iv_playNext = findViewById(R.id.iv_playNext);
@@ -65,6 +68,7 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
         iv_playNext.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         iv_playOrPause.setOnClickListener(this);
+        ly_playAll.setOnClickListener(this);
 
         playPattern = getPlayPattern();
 
@@ -163,6 +167,19 @@ public class MusicListActivity extends AppCompatActivity implements View.OnClick
                 index = getBottomIndex();
                 music = musicList.get(index);
                 showPlayInfo();
+                intent.putExtra("music", music);
+                intent.putExtra("newmusic", 1);
+                break;
+            case R.id.ly_playAll://播放全部
+                if(musicList==null||musicList.size()<1){
+                    Toast.makeText(mContext, "你没得歌曲，去下载两首嘛！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                index = 0;
+                music = musicList.get(0);
+                showPlayInfo();
+
+                //发送广播通知服务播放第一首新歌曲
                 intent.putExtra("music", music);
                 intent.putExtra("newmusic", 1);
                 break;

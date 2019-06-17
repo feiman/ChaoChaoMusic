@@ -45,7 +45,7 @@ public class MusicService extends Service {
         musicServiceBroadcastReceiver = new MusicServiceBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.xch.musicService");
-        intentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);//耳机拔出的广播
+        intentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         registerReceiver(musicServiceBroadcastReceiver, intentFilter);
     }
 
@@ -121,8 +121,7 @@ public class MusicService extends Service {
                 player.seekTo(currPosition);
             }
 
-            //拔出耳机，暂停
-            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+            if(intent.getAction().equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)){
                 player.pause();
                 mstate = 12;
             }

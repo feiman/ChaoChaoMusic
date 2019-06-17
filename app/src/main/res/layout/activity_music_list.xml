@@ -10,7 +10,7 @@
     <include layout="@layout/musiclist_header" />
 
     <RelativeLayout
-        android:id="@+id/play_all_layout"
+        android:id="@+id/ly_playAll"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="bottom"
