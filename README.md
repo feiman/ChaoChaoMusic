@@ -18,11 +18,12 @@
 <img src="https://github.com/yangxch/ChaoChaoMusic/raw/master/screenshot/music_play.jpg" width="30%" height="30%">
 </div>
 
-
+<br>
+<br>
 
 我打了个安装包放到了云服务器上，要安装体验的可以扫码下载
 <div> 
-<img src="https://github.com/yangxch/ChaoChaoMusic/raw/master/screenshot/qr_chaochaomusic.png" width="30%" height="30%">
+<img src="https://github.com/yangxch/ChaoChaoMusic/raw/master/screenshot/qr_chaochaomusic.png" width="25%" height="25%">
 </div>
 
 
