@@ -11,6 +11,8 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.yxc.chaochaomusic.bean.LocalMusic;
@@ -30,7 +32,38 @@ public class MusicService extends Service {
         registerServiceBroadcastReceiver();
         //监听音乐是否播放完
         monitorMusicIsCompletion();
+
+        //监听来电
+        TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);// 获取电话服务
+        tmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
+
+    private boolean mResumeAfterCall = false;
+    //监听来电状态，来电暂停播放，挂断继续播放
+    private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            if (state == TelephonyManager.CALL_STATE_RINGING) {//响铃状态
+                AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                int ringvolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+                if (ringvolume > 0) {
+                    mResumeAfterCall = (player.isPlaying() || mResumeAfterCall);
+                    player.pause();
+                    mstate = 12;
+                }
+            } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {//通话状态
+                mResumeAfterCall = (player.isPlaying() || mResumeAfterCall);
+                player.pause();
+                mstate = 12;
+            } else if (state == TelephonyManager.CALL_STATE_IDLE) {// 挂机状态
+                if (mResumeAfterCall) {
+                    player.start();
+                    mstate = 11;
+                    mResumeAfterCall = false;
+                }
+            }
+        }
+    };
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -45,7 +78,7 @@ public class MusicService extends Service {
         musicServiceBroadcastReceiver = new MusicServiceBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.xch.musicService");
-        intentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        intentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);//拔出耳机的广播
         registerReceiver(musicServiceBroadcastReceiver, intentFilter);
     }
 
@@ -121,6 +154,7 @@ public class MusicService extends Service {
                 player.seekTo(currPosition);
             }
 
+            //拔出耳机，暂停
             if(intent.getAction().equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)){
                 player.pause();
                 mstate = 12;
@@ -223,4 +257,11 @@ public class MusicService extends Service {
             }
         }
     };
+
+    public void onDestroy() {
+        //取消来电监听
+        TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        tmgr.listen(mPhoneStateListener, 0);
+        super.onDestroy();
+    }
 }
