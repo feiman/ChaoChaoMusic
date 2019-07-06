@@ -33,7 +33,7 @@ public class MusicService extends Service {
         //监听音乐是否播放完
         monitorMusicIsCompletion();
 
-        //监听来电
+        //监听来电(注：我发现某些手机监听不了，用其他方法吧，比如广播)
         TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);// 获取电话服务
         tmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
@@ -44,6 +44,7 @@ public class MusicService extends Service {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             if (state == TelephonyManager.CALL_STATE_RINGING) {//响铃状态
+                Log.e("MusicService" ,"电话响铃");
                 AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 int ringvolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
                 if (ringvolume > 0) {
@@ -52,10 +53,12 @@ public class MusicService extends Service {
                     mstate = 12;
                 }
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {//通话状态
+                Log.e("MusicService" ,"通话状态");
                 mResumeAfterCall = (player.isPlaying() || mResumeAfterCall);
                 player.pause();
                 mstate = 12;
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {// 挂机状态
+                Log.e("MusicService" ,"挂机状态");
                 if (mResumeAfterCall) {
                     player.start();
                     mstate = 11;

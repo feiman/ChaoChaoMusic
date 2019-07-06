@@ -36,8 +36,6 @@ public class MusicUtil {
                 String path=cursor.getString(cursor.getColumnIndex(Media.DATA));
                 //时长
                 long duration=cursor.getLong(cursor.getColumnIndex(Media.DURATION));
-                //是否为音乐
-//                int isMusic=cursor.getInt(cursor.getColumnIndex(Media.IS_MUSIC));
                 //专辑
                 String album=cursor.getString(cursor.getColumnIndex(Media.ALBUM));
 

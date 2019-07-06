@@ -15,7 +15,7 @@ public class WelcomeActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_welcome);
 
-        // 使用Handler的postDelayed方法，3秒后执行跳转到MainActivity
+        // 使用Handler的postDelayed方法，3秒后执行跳转到HomeActivity
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 goHome();
